@@ -1,7 +1,9 @@
 {  
-   "clusters":[  
-      {  
-         "name":"sherlock1",
+   "clusters":
+  
+      { "sherlock":{ 
+
+         "name":"sherlock",
          "nodes": {  
             "maxnnodes":8000,
             "maxnsockets":2,
@@ -24,7 +26,7 @@
             }
          ]
       },
-      {  
+     "sherlock2": { 
          "name":"sherlock2",
          "nodes": {  
             "maxnnodes":8000,
@@ -48,6 +50,5 @@
             }
          ]
       }
-
-   ]
+   }
 }

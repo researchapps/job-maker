@@ -35,8 +35,10 @@
                 <a href="#" class="about" v-on:click="makeActive('about')">About</a>
             </nav>
 
-            <p style="display:none">You chose <b>{{active}}</b></p>
+            <p style="display:none">You chose <b>{{ active }}</b></p>
+            <p id="message" class="alert alert-danger" v-if="message">{{ message }}</p>
         </div>
+
     </div>
 
     <div class="container" id="main">
@@ -64,17 +66,20 @@
                         id='cluster-select' 
                         class="form-control">
                     <option disabled value="">Please select your cluster</option>
-                    <option value="sherlock">Sherlock</option>
-                    <option value="sherlock2">Sherlock 2</option>
-                    <option value="tacc">TACC</option>
+                    <!--TODO: 
+                              this needs to be populated from the data
+                              https://github.com/researchapps/job-maker/issues/3 
+                    -->
+                    <option value="sherlock">sherlock</option>
+                    <option value="sherlock2">sherlock2</option>
                 </select>
             </div>
 
             <!-- Script Name (old appname-group) -->
             <div id="script-group" class="form-group">
                 <label class="control-label">Script: {{ script_name }}</label>
-        <span class="help-block">Specify your script including the full path.</span>
-        <input v-model="script_name" 
+                <span class="help-block">Specify your script including the full path.</span>
+                <input v-model.trim="script_name" 
                        id="script-text" 
                        type="text" 
                        class="form-control" 
@@ -84,7 +89,7 @@
             <!-- Job Name -->
             <div id="jobname-group" class="form-group">
                 <label class="control-label">Job Name: {{ job_name }}</label>
-                <input v-model="job_name"
+                <input v-model.trim="job_name"
                        id="jobname-text" 
                        type="text" 
                        class="form-control">
@@ -93,7 +98,7 @@
             <!-- Email -->
             <div id="email-group" class="form-group">
                  <label class="control-label">Email Address: {{ email_address }}</label>
-                 <input v-model="email_address"
+                 <input v-model.trim="email_address"
                         id="email-text" 
                         type="email" 
                         class="form-control">
@@ -106,7 +111,7 @@
 
                 <!-- Hours -->
                 <div class="col-md-4">
-                    <input v-model="time_hours"
+                    <input v-model.number="time_hours"
                            id="wc-hours-text" 
                            type="number" 
                            class="form-control" 
@@ -117,7 +122,7 @@
 
                 <!-- Minutes -->
                 <div class="col-md-4">
-                    <input v-model="time_minutes"
+                    <input v-model.number="time_minutes"
                            id="wc-minutes-text" 
                            type="number" 
                            class="form-control" 
@@ -127,7 +132,7 @@
 
                 <!-- Seconds -->
                 <div class="col-md-4">
-                    <input v-model="time_seconds"
+                    <input v-model.number="time_seconds"
                            id="wc-seconds-text" 
                            type="number" 
                            class="form-control" 
@@ -139,22 +144,37 @@
             </div>
 
             <!-- Partition -->
-            <div id="partitions-group" class="form-group">
-                <label class="control-label">Partition: {{ partition_name }}</label>
-                <span class="help-block">Select the partition you want to run your job on.</span>
-                <select v-model="partition_name"
-                        id='partition-select' 
-                        class="form-control">
-                    <option value="normal">normal</option>
-                    <option value="dev">dev</option>
-                </select>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="partitions-group" class="form-group">
+                        <label class="control-label">Partition: {{ partition_name }}</label>
+                        <select v-model="partition_name"
+                                v-on:input="updatePartition($event)"
+                                id='partition-select' 
+                                class="form-control">
+                            <option value="normal">normal</option>
+                            <option value="dev">dev</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Custom Partition -->
+                <div class="col-md-6">
+                    <div id="partition-custom-group" class="form-group">
+                        <label class="control-label">Custom Partition: {{ partition_name }}</label>
+                        <input v-on:input="updatePartition($event)"
+                               id="partition-custom-text" 
+                               type="text" 
+                               class="form-control">
+                    </div>
+                </div>
             </div>
 
             <!-- Number nodes -->
             <div id="nodes-group" class="form-group">
                 <label class="control-label">Number of Nodes: {{ number_nodes }}</label>
                 <span class="help-block">How many nodes are used?</span>
-                <input v-model="number_nodes"
+                <input v-model.number="number_nodes"
                        id="nodes-text" 
                        type="number" 
                        class="form-control" 
@@ -168,11 +188,12 @@
         <!-- SCRIPT GENERATION -->
         <div class="col-md-6">
             <div id="output-group" class="form-group">
-                <textarea class="form-control" 
+                <textarea v-model='output'
+                          class="form-control" 
                           rows="30" 
                           id="script-output" 
                           style="resize: vertical" 
-                          readonly="true"> Your script will be displayed here. </textarea>
+                          readonly="true">{{ output }}</textarea>
             </div>
         </div>
 
@@ -182,12 +203,19 @@
     <div class="row">
         <div class="col-md-12 panel" id="generate-button" v-on:click.prevent>
             <button v-on:click="generateScript()" 
-               value="Generate Script" 
-               style="width:100%;background-color: #389dc1; color:white; font-weight:800"
-               class="btn btn-secondary"/>Generate
+                    value="Generate Script" 
+                    style="width:100%;background-color: #389dc1; color:white; font-weight:800"
+                    class="btn btn-secondary"/>Generate
             </button>      
         </div>
     </div>
+
+    <!-- Take me home, country road... to the top... where i belong!-->
+    <button v-on:click="generateJump()" 
+            title="generateJump"
+            id="generateJump"
+            class="btn btn-secondary">
+            Generate at bottom</button>
 
     <br><br>
 

@@ -84,6 +84,26 @@ p b {
   color: white;
 }
 
+#generateJump {
+  display: block;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: darkturquoise;
+  color: white;
+  cursor: pointer;
+  margin:15px;
+  border-radius: 10px;
+}
+
+#generateJump:hover {
+  background-color: #555;
+}
+
+
 .panel {
     margin-bottom: 20px;
     padding-top:50px;
