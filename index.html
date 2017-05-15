@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:site" content="@researchapps">
+        <meta property="og:site_name" content="JobMaker">
+        <meta property="og:title" content="JobMaker">
+        <meta property="og:image" content="">
+        <meta property="og:description" content="JobMaker is a SLURM job submission script generator.">
+        <meta property="og:url" content="https://oss.stanford.edu/job-maker">
+
+        <title>Stanford Job Generator</title>
+
+        <link href="assets/css/bootstrap.css" rel="stylesheet">
+        <link href="assets/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" href="assets/css/style.css" />
+          
+    </head>
+
+    <body>
+
+    <div id="nav" class="row" style="padding-bottom:20px">
+        <div class="col-md-12">
+            <a class="navbar-brand" 
+               href="http://oss.stanford.edu" 
+               style="padding:8px 8px;">
+               <img src="assets/img/logo.png" height=35>
+            </a>
+
+            <!-- Top Navigation to show user where they are -->
+            <nav v-bind:class="active" v-on:click.prevent>
+                <a href="#" class="generate" v-on:click="makeActive('generate')">Generate</a>
+                <a href="#" class="about" v-on:click="makeActive('about')">About</a>
+            </nav>
+
+            <p style="display:none">You chose <b>{{active}}</b></p>
+        </div>
+    </div>
+
+    <div class="container" id="main">
+
+    <!-- Icons -->
+    <div class="row" style="padding-bottom:20px">        
+        <div class="col-md-6">
+            <h2 class="center"><i class="fa fa-code blue"></i></h2>
+            <small class="grey">Enter your cluster and job specs to create a job script on the right.</small>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+
+    <!-- Information -->
+    <div class="row">
+
+        <!-- USER CONFIGURATION -->
+        <div class="col-md-6" id="machine-group">
+
+            <!-- Machine Selection -->
+            <div id="cluster-group" class="form-group">
+                <label class="control-label">Cluster: {{ cluster_name }}</label>
+                <select v-model="cluster_name" 
+                        id='cluster-select' 
+                        class="form-control">
+                    <option disabled value="">Please select your cluster</option>
+                    <option value="sherlock">Sherlock</option>
+                    <option value="sherlock2">Sherlock 2</option>
+                    <option value="tacc">TACC</option>
+                </select>
+            </div>
+
+            <!-- Script Name (old appname-group) -->
+            <div id="script-group" class="form-group">
+                <label class="control-label">Script: {{ script_name }}</label>
+        <span class="help-block">Specify your script including the full path.</span>
+        <input v-model="script_name" 
+                       id="script-text" 
+                       type="text" 
+                       class="form-control" 
+                       value="start.sh">
+            </div>
+
+            <!-- Job Name -->
+            <div id="jobname-group" class="form-group">
+                <label class="control-label">Job Name: {{ job_name }}</label>
+                <input v-model="job_name"
+                       id="jobname-text" 
+                       type="text" 
+                       class="form-control">
+            </div>
+
+            <!-- Email -->
+            <div id="email-group" class="form-group">
+                 <label class="control-label">Email Address: {{ email_address }}</label>
+                 <input v-model="email_address"
+                        id="email-text" 
+                        type="email" 
+                        class="form-control">
+            </div>
+
+            <!--Time-->
+            <div id="time-group" class="form-group">
+                <label class="control-label">Job Duration: {{ time_hours }}:{{ time_minutes}}:{{ time_seconds }}</label>
+                <span class="help-block">Specify the duration of the job.</span>
+
+                <!-- Hours -->
+                <div class="col-md-4">
+                    <input v-model="time_hours"
+                           id="wc-hours-text" 
+                           type="number" 
+                           class="form-control" 
+                           min="0" 
+                           value=0>
+                    <span class="help-block">hours</span>
+                </div>
+
+                <!-- Minutes -->
+                <div class="col-md-4">
+                    <input v-model="time_minutes"
+                           id="wc-minutes-text" 
+                           type="number" 
+                           class="form-control" 
+                           min="0" max="59" value=30>
+                    <span class="help-block">minutes</span>
+                </div>
+
+                <!-- Seconds -->
+                <div class="col-md-4">
+                    <input v-model="time_seconds"
+                           id="wc-seconds-text" 
+                           type="number" 
+                           class="form-control" 
+                           min="0" 
+                           max="59" 
+                           value=0>
+                    <span class="help-block">seconds</span>
+                </div>
+            </div>
+
+            <!-- Partition -->
+            <div id="partitions-group" class="form-group">
+                <label class="control-label">Partition: {{ partition_name }}</label>
+                <span class="help-block">Select the partition you want to run your job on.</span>
+                <select v-model="partition_name"
+                        id='partition-select' 
+                        class="form-control">
+                    <option value="normal">normal</option>
+                    <option value="dev">dev</option>
+                </select>
+            </div>
+
+            <!-- Number nodes -->
+            <div id="nodes-group" class="form-group">
+                <label class="control-label">Number of Nodes: {{ number_nodes }}</label>
+                <span class="help-block">How many nodes are used?</span>
+                <input v-model="number_nodes"
+                       id="nodes-text" 
+                       type="number" 
+                       class="form-control" 
+                       min="1" 
+                       value=1>
+            </div>
+
+        </div>
+
+
+        <!-- SCRIPT GENERATION -->
+        <div class="col-md-6">
+            <div id="output-group" class="form-group">
+                <textarea class="form-control" 
+                          rows="30" 
+                          id="script-output" 
+                          style="resize: vertical" 
+                          readonly="true"> Your script will be displayed here. </textarea>
+            </div>
+        </div>
+
+    </div>
+
+                                        
+    <div class="row">
+        <div class="col-md-12 panel" id="generate-button" v-on:click.prevent>
+            <button v-on:click="generateScript()" 
+               value="Generate Script" 
+               style="width:100%;background-color: #389dc1; color:white; font-weight:800"
+               class="btn btn-secondary"/>Generate
+            </button>      
+        </div>
+    </div>
+
+    <br><br>
+
+    <hr>
+</div>
+
+    <!--  Scripts-->
+    <script src="assets/js/jquery-2.1.1.min.js"></script>
+    <script src="assets/js/vue.min.js"></script>
+    <script src="assets/js/script.js"></script>
+
+</body>
+</html>

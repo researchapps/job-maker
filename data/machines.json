@@ -1,0 +1,53 @@
+{  
+   "clusters":[  
+      {  
+         "name":"sherlock1",
+         "nodes": {  
+            "maxnnodes":8000,
+            "maxnsockets":2,
+            "maxncores":24,
+            "maxnht":2,
+            "nranks_bc":50000
+         },
+         "queues":[  
+            {  
+               "name":"normal",
+               "maxtime":"24:00:00"
+            },
+            {  
+               "name":"long",
+               "maxtime":"72:00:00"
+            },
+            {  
+               "name":"dev",
+               "maxtime":"1:00:00"
+            }
+         ]
+      },
+      {  
+         "name":"sherlock2",
+         "nodes": {  
+            "maxnnodes":8000,
+            "maxnsockets":2,
+            "maxncores":24,
+            "maxnht":2,
+            "nranks_bc":50000
+         },
+         "queues":[  
+            {  
+               "name":"normal",
+               "maxtime":"24:00:00"
+            },
+            {  
+               "name":"long",
+               "maxtime":"72:00:00"
+            },
+            {  
+               "name":"dev",
+               "maxtime":"1:00:00"
+            }
+         ]
+      }
+
+   ]
+}
