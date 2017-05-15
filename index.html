@@ -31,8 +31,9 @@
 
             <!-- Top Navigation to show user where they are -->
             <nav v-bind:class="active" v-on:click.prevent>
-                <a href="#" class="generate" v-on:click="makeActive('generate')">Generate</a>
-                <a href="#" class="about" v-on:click="makeActive('about')">About</a>
+                <a href="#" class="generate" 
+                            style="font-weight:800" 
+                            v-on:click="makeActive('generate')">Stanford Compute Job Maker</a>
             </nav>
 
             <p style="display:none">You chose <b>{{ active }}</b></p>
@@ -200,22 +201,17 @@
     </div>
 
                                         
-    <div class="row">
-        <div class="col-md-12 panel" id="generate-button" v-on:click.prevent>
-            <button v-on:click="generateScript()" 
-                    value="Generate Script" 
-                    style="width:100%;background-color: #389dc1; color:white; font-weight:800"
-                    class="btn btn-secondary"/>Generate
-            </button>      
-        </div>
-    </div>
-
     <!-- Take me home, country road... to the top... where i belong!-->
-    <button v-on:click="generateJump()" 
+    <button v-on:click="generateScript()" 
             title="generateJump"
+            value="Generate Script"
             id="generateJump"
             class="btn btn-secondary">
-            Generate at bottom</button>
+            Generate</button>
+
+    <div id="robot" style="display:none">
+        <img src="assets/img/robot.png" width="200px">
+    </div>
 
     <br><br>
 

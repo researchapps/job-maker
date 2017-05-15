@@ -16,6 +16,11 @@ var nav = new Vue({
 
         makeActive: function(item){
             this.active = item;
+            console.log('Beep Boop!');
+            $('#robot').show();
+            setTimeout(function(){
+                $("#robot").hide();
+            }, 2000);
         },
 
     }

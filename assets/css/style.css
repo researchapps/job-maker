@@ -99,6 +99,13 @@ p b {
   border-radius: 10px;
 }
 
+#robot {
+  position: fixed !important;
+  left: 60% !important;
+  top: 60% !important;
+  z-index: 9999 !important;
+}
+
 #generateJump:hover {
   background-color: #555;
 }
