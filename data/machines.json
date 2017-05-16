@@ -1,54 +1,959 @@
-{  
-   "clusters":
-  
-      { "sherlock":{ 
-
-         "name":"sherlock",
-         "nodes": {  
-            "maxnnodes":8000,
-            "maxnsockets":2,
-            "maxncores":24,
-            "maxnht":2,
-            "nranks_bc":50000
-         },
-         "queues":[  
-            {  
-               "name":"normal",
-               "maxtime":"24:00:00"
-            },
-            {  
-               "name":"long",
-               "maxtime":"72:00:00"
-            },
-            {  
-               "name":"dev",
-               "maxtime":"1:00:00"
-            }
-         ]
+{
+  "clusters": {
+    "sherlock": {
+      "partitions": {
+        "jianq": {
+          "max": {
+            "mem-per-cpu": "4096"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "4000",
+            "time": "2:0:0"
+          }
+        },
+        "yamins": {
+          "max": {
+            "mem-per-cpu": "13107"
+          },
+          "default": {
+            "mem-per-cpu": "12800",
+            "time": "2:0:0"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "hns": {
+          "qos": [
+            "normal",
+            "hns",
+            "system"
+          ],
+          "default": {
+            "qos": "hns",
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          }
+        },
+        "whwong": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          }
+        },
+        "owners": {
+          "qos": [
+            "normal",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "4000",
+            "time": "2:0:0"
+          }
+        },
+        "mcovert": {
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        },
+        "hns_gpu": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "qos": [
+            "normal",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0",
+            "qos": "hns_gpu"
+          }
+        },
+        "pelc": {
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "normal": {
+          "default": {
+            "mem-per-cpu": "4000",
+            "time": "2:0:0"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        },
+        "fkessler": {
+          "max": {
+            "mem-per-cpu": "16384"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "16000"
+          }
+        },
+        "rbaltman": {
+          "default": {
+            "mem-per-cpu": "4000",
+            "time": "2:0:0",
+            "qos": "rbaltman"
+          },
+          "qos": [
+            "normal",
+            "rbaltman",
+            "system"
+          ]
+        },
+        "stat": {
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "diffenbaugh": {
+          "default": {
+            "mem-per-cpu": "4000",
+            "qos": "diffenbaugh",
+            "time": "2:0:0"
+          },
+          "qos": [
+            "normal",
+            "diffenbaugh",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        },
+        "spalumbi": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "16000",
+            "time": "2:0:0"
+          },
+          "max": {
+            "mem-per-cpu": "16384"
+          }
+        },
+        "jhyoon1": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          },
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "delp": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0"
+          }
+        },
+        "msalit": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "pande": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          },
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "chetty": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "16000"
+          },
+          "max": {
+            "mem-per-cpu": "16384"
+          }
+        },
+        "rondror": {
+          "default": {
+            "time": "2:0:0",
+            "qos": "rondror",
+            "mem-per-cpu": "4000"
+          },
+          "qos": [
+            "normal",
+            "rondror",
+            "rondror_high",
+            "system"
+          ]
+        },
+        "pritch": {
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "16000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "16384"
+          }
+        },
+        "hbfraser": {
+          "qos": [
+            "normal",
+            "hbfraser",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "4000",
+            "qos": "hbfraser",
+            "time": "2:0:0"
+          }
+        },
+        "ibiis": {
+          "qos": [
+            "normal",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "16000",
+            "time": "2:0:0",
+            "qos": "ibiis"
+          },
+          "max": {
+            "mem-per-cpu": "16384"
+          }
+        },
+        "biochem": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          },
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        },
+        "brunger": {
+          "max": {
+            "mem-per-cpu": "16384"
+          },
+          "default": {
+            "qos": "brunger",
+            "time": "2:0:0",
+            "mem-per-cpu": "16000"
+          },
+          "qos": [
+            "normal",
+            "brunger",
+            "system"
+          ]
+        },
+        "djames": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          }
+        },
+        "eriking": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "qos": [
+            "normal",
+            "eriking",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0",
+            "qos": "eriking"
+          }
+        },
+        "agitler": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "shenoy": {
+          "max": {
+            "mem-per-cpu": "16384"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "16000"
+          }
+        },
+        "iric": {
+          "qos": [
+            "normal",
+            "iric",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "qos": "iric",
+            "mem-per-cpu": "4000"
+          }
+        },
+        "dev": {
+          "qos": [
+            "normal",
+            "dev",
+            "system"
+          ],
+          "default": {
+            "time": "1:0:0",
+            "qos": "dev",
+            "mem-per-cpu": "4000"
+          },
+          "max": {
+            "time": "0-2:0:0",
+            "mem-per-cpu": "4096"
+          }
+        },
+        "jonfan": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0"
+          },
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "dpwall": {
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "schneidr": {
+          "max": {
+            "mem-per-cpu": "16384"
+          },
+          "default": {
+            "mem-per-cpu": "16000",
+            "time": "2:0:0"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "jduchi": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0"
+          }
+        },
+        "haiwang": {
+          "max": {
+            "mem-per-cpu": "4096"
+          },
+          "qos": [
+            "normal",
+            "haiwang",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "qos": "haiwang",
+            "mem-per-cpu": "4000"
+          }
+        },
+        "abutte": {
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "test": {
+          "default": {
+            "mem-per-cpu": "4000"
+          },
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        },
+        "euan": {
+          "max": {
+            "mem-per-cpu": "8192"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0",
+            "qos": "owner"
+          }
+        },
+        "cees": {
+          "max": {
+            "mem-per-cpu": "4096"
+          },
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "lmackey": {
+          "max": {
+            "mem-per-cpu": "16384"
+          },
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "16000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "russpold": {
+          "default": {
+            "mem-per-cpu": "8000",
+            "time": "2:0:0",
+            "qos": "russpold"
+          },
+          "qos": [
+            "normal",
+            "russpold",
+            "russpold_interactive",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "kornberg": {
+          "default": {
+            "time": "2:0:0",
+            "qos": "kornberg",
+            "mem-per-cpu": "8000"
+          },
+          "qos": [
+            "normal",
+            "kornberg",
+            "system"
+          ]
+        },
+        "amarsden": {
+          "max": {
+            "mem-per-cpu": "4096"
+          },
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "bigmem": {
+          "qos": [
+            "normal",
+            "bigmem",
+            "system"
+          ],
+          "default": {
+            "qos": "bigmem",
+            "time": "2:0:0",
+            "mem-per-cpu": "48000"
+          },
+          "max": {
+            "mem-per-cpu": "49152"
+          }
+        },
+        "manishad": {
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ]
+        },
+        "cee": {
+          "default": {
+            "time": "2:0:0",
+            "qos": "cee",
+            "mem-per-cpu": "4000"
+          },
+          "qos": [
+            "normal",
+            "cee",
+            "system"
+          ],
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        },
+        "dpetrov": {
+          "max": {
+            "mem-per-cpu": "4096"
+          },
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          }
+        },
+        "cbohon": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "4000"
+          },
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        },
+        "gpu": {
+          "max": {
+            "mem-per-cpu": "16384"
+          },
+          "qos": [
+            "normal",
+            "gpu",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "16000",
+            "time": "2:0:0",
+            "qos": "gpu"
+          }
+        },
+        "horence": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "4000",
+            "time": "2:0:0"
+          }
+        },
+        "mc": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "time": "2:0:0",
+            "mem-per-cpu": "8000"
+          },
+          "max": {
+            "mem-per-cpu": "8192"
+          }
+        },
+        "wolak": {
+          "qos": [
+            "normal",
+            "long",
+            "system"
+          ],
+          "default": {
+            "mem-per-cpu": "4000",
+            "time": "2:0:0"
+          },
+          "max": {
+            "mem-per-cpu": "4096"
+          }
+        }
       },
-     "sherlock2": { 
-         "name":"sherlock2",
-         "nodes": {  
-            "maxnnodes":8000,
-            "maxnsockets":2,
-            "maxncores":24,
-            "maxnht":2,
-            "nranks_bc":50000
-         },
-         "queues":[  
-            {  
-               "name":"normal",
-               "maxtime":"24:00:00"
+      "qos": {
+        "hns_gpu": {
+          "min": {
+            "gres": {
+              "gpu": "1"
             },
-            {  
-               "name":"long",
-               "maxtime":"72:00:00"
-            },
-            {  
-               "name":"dev",
-               "maxtime":"1:00:00"
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "2-00:00:00"
+          }
+        },
+        "normal": {
+          "max": {
+            "cpu": "512"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "rbaltman": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "7-00:00:00"
+          }
+        },
+        "haiwang": {
+          "max": {
+            "wall": "14-00:00:00"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "hns": {
+          "max": {
+            "wall": "14-00:00:00"
+          }
+        },
+        "kornberg": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "7-00:00:00"
+          }
+        },
+        "diffenbaugh": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "7-00:00:00"
+          }
+        },
+        "russpold": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "7-00:00:00"
+          }
+        },
+        "long": {
+          "max": {
+            "cpu": "128"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "cee": {
+          "max": {
+            "wall": "7-00:00:00"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "brunger": {
+          "max": {
+            "wall": "7-00:00:00"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "ibiis": {
+          "max": {
+            "wall": "2-00:00:00"
+          }
+        },
+        "system": {
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "hbfraser": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "7-00:00:00"
+          }
+        },
+        "rondror_high": {
+          "max": {
+            "wall": "2-00:00:00"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "rondror": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "14-00:00:00"
+          }
+        },
+        "bigmem": {
+          "max": {
+            "cpu": "32",
+            "node": "1"
+          },
+          "min": {
+            "mem": "64G",
+            "cpu": "1"
+          }
+        },
+        "owner": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "7-00:00:00"
+          }
+        },
+        "russpold_interactive": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "2-00:00:00"
+          }
+        },
+        "iric": {
+          "max": {
+            "wall": "7-00:00:00"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "dev": {
+          "max": {
+            "node": "2",
+            "cpu": "2"
+          },
+          "min": {
+            "cpu": "1"
+          }
+        },
+        "gpu": {
+          "min": {
+            "cpu": "1",
+            "gres": {
+              "gpu": "1"
             }
-         ]
+          },
+          "max": {
+            "node": "16",
+            "cpu": "32"
+          }
+        },
+        "eriking": {
+          "min": {
+            "cpu": "1"
+          },
+          "max": {
+            "wall": "7-00:00:00"
+          }
+        }
+      },
+      "features": [
+        "CPU_SNB",
+        "E5-4640",
+        "2.40GHz",
+        "NOACCL",
+        "CPU_IVY",
+        "E5-2650v2",
+        "2.60GHz",
+        "CPU_HSW",
+        "E5-2640v3",
+        "E7-4830v3",
+        "2.10GHz",
+        "E5-2698v3",
+        "2.30GHz",
+        "E5-2680v3",
+        "2.50GHz",
+        "E5-2695v3",
+        "E5-2640v2",
+        "2.00GHz",
+        "GPU_KPL",
+        "K20X",
+        "k20x",
+        "TITAN_BLACK",
+        "titanblack",
+        "GPU_MXW",
+        "TITAN_X",
+        "titanx",
+        "K80"
+      ],
+      "gres": {
+        "gpu": [
+          "tesla",
+          "gtx"
+        ]
+      },
+      "users": {
+        "*": [
+          "normal",
+          "dev",
+          "bigmem",
+          "gpu"
+        ]
       }
-   }
+    }
+  }
 }
