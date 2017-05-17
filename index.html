@@ -63,16 +63,11 @@
             <!-- Machine Selection -->
             <div id="cluster-group" class="form-group">
                 <label class="control-label">Cluster: {{ cluster_name }}</label>
-                <select v-model="cluster_name" 
+                <select v-model="cluster_name"
+                        v-on:input="updatePartitions()"  
                         id='cluster-select' 
                         class="form-control">
                     <option disabled value="">Please select your cluster</option>
-                    <!--TODO: 
-                              this needs to be populated from the data
-                              https://github.com/researchapps/job-maker/issues/3 
-                    -->
-                    <option value="sherlock">sherlock</option>
-                    <option value="sherlock2">sherlock2</option>
                 </select>
             </div>
 
@@ -146,27 +141,15 @@
 
             <!-- Partition -->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div id="partitions-group" class="form-group">
                         <label class="control-label">Partition: {{ partition_name }}</label>
                         <select v-model="partition_name"
-                                v-on:input="updatePartition($event)"
                                 id='partition-select' 
                                 class="form-control">
                             <option value="normal">normal</option>
                             <option value="dev">dev</option>
                         </select>
-                    </div>
-                </div>
-
-                <!-- Custom Partition -->
-                <div class="col-md-6">
-                    <div id="partition-custom-group" class="form-group">
-                        <label class="control-label">Custom Partition: {{ partition_name }}</label>
-                        <input v-on:input="updatePartition($event)"
-                               id="partition-custom-text" 
-                               type="text" 
-                               class="form-control">
                     </div>
                 </div>
             </div>

@@ -1,6 +1,20 @@
 // Input data
-var machines = "data/machines.json"
+var machines;
 
+fetchData = function () {
+    var xhr = new XMLHttpRequest()
+    xhr.open('GET', "data/machines.json")
+    xhr.onload = function () {
+        window.machines = JSON.parse(xhr.responseText)
+        var clusters = Object.keys(window.machines)
+        $.each(clusters,function(i,e){ 
+            $("#cluster-select").append('<option value="' + e + '">'+ e + '</option>')
+        })
+    }
+    xhr.send()
+}
+
+fetchData()
 
 var nav = new Vue({
 
@@ -31,8 +45,8 @@ var cluster = new Vue({
 
     el: '#main',
 
-    created: function () {
-        this.fetchData()
+    created: function() {
+        this.machines = window.machines;
     },
 
     data: {
@@ -54,17 +68,6 @@ var cluster = new Vue({
 
     // Functions we will be using.
     methods: {
-
-        // Setup
-        fetchData: function () {
-            var xhr = new XMLHttpRequest()
-            var self = this
-            xhr.open('GET', machines)
-            xhr.onload = function () {
-                self.machines = JSON.parse(xhr.responseText)
-            }
-            xhr.send()
-        },
 
         // Script Generation
         generateScript: function(){
@@ -138,16 +141,15 @@ var cluster = new Vue({
             window.scrollTo(0,document.body.scrollHeight);
         },
 
-        updatePartition: function(event) {
-            var element = $(event.target)
-            var partition_name = $(event.target).val();
+        updatePartitions: function() {
+ 
+           var cluster_name = $("#cluster-select").val();
+           var partitions = Object.keys(window.machines[cluster_name]['partitions'])
+           $("#partition-select").text(''); 
+           $.each(partitions,function(i,e){
+               $("#partition-select").append('<option value="' + e + '">'+ e + '</option>')
+           })
 
-            if ($(element).attr('id') == "partition-custom-text"){
-                this.partition_name = null;
-                this.custom_partition = partition_name
-            } 
-            this.custom_partition = partition_name
-            
         },
 
         writeHeader: function() {
