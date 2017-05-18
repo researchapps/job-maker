@@ -1,0 +1,44 @@
+{
+    "clustername": {
+        "defaults": {
+            "partitions": [
+                "normal"
+            ],
+            "nodes": []
+        },
+        "partitions": {
+            "normal": {
+                "maxNodes": 8000,
+                "DefaultTime": "2:0:0",
+                "DefMemPerCPU": "12000",
+                "PartitionName": "normal",
+                "AllowQos": "normal,long",
+                "Default": "YES",
+                "MaxMemPerCPU": "12800"
+            }
+        },
+        "features": {
+            "normal": [
+                "gpu_shared"
+            ]
+        },
+        "nodes": {
+            "node-1": {
+                "Feature": "\"gpu_shared\"",
+                "RealMemory": "257862",
+                "Gres": "gpu:k80:16",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "node-2": {
+                "Feature": "\"gpu_shared\"",
+                "RealMemory": "257862",
+                "Gres": "gpu:k80:16",
+                "partitions": [
+                    "normal"
+                ]
+            }
+        }
+    }
+}

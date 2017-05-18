@@ -93,7 +93,7 @@ I chose to parse the `slurm.conf` and not require any additional permissions (e.
 The configuration and specification for your cluster is defined by files in the [assets/data](assets/data) folder. We generated these files from the `slurm.conf` directly, which is usually located at `/etc/slurm/slurm.conf`. You have a few options for generating these data files:
 
 ### Option 2. Manual
-If you don't want to generate the file programatically, you can manually enter values for your cluster. A template / example file for you to start from is provided in [helpers/template](helpers/template).
+If you don't want to generate the file programatically, you can manually enter values for your cluster. A template / example file for you to start from is provided in [helpers/templates](helpers/templates).
 
 ### Option 1. Programmatic
 In the helpers folder, we have provided a command line executable, [slurm2json.py](helpers/slurm2json.py) that can be run with the `slurm.conf` to generate the required data files. You have a few ways to run this, depending on the number of clusters and level of filtering you want to apply to each. First, take a look at the usage:
