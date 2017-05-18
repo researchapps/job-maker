@@ -156,7 +156,6 @@ var cluster = new Vue({
                }
 
               var max_nodes = Number(choice.partitions[partition].maxNodes);            
-              console.log(choice);
 
               if ((self.number_nodes > max_nodes) || (self.number_nodes < 1)) {
                   if (self.number_nodes < 1) nav.message = 'You must specify at least one node.'
