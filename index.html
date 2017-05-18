@@ -37,7 +37,9 @@
             </nav>
 
             <p style="display:none">You chose <b>{{ active }}</b></p>
-            <p id="message" class="alert alert-danger" v-if="message">{{ message }}</p>
+            <p style="margin:0px" id="message" class="alert alert-danger" v-if="message">{{ message }}</p>
+            <p style="margin:0px" id="warning" class="alert alert-info" v-if="warning">{{ warning }}</p>
+
         </div>
 
     </div>
@@ -51,6 +53,7 @@
             <small class="grey">Enter your cluster and job specs to create a job script on the right.</small>
         </div>
         <div class="col-md-6">
+            <h4 style="padding-top:40px" v-if="job_name">{{ job_name}}.job</h4>
         </div>
     </div>
 
@@ -71,7 +74,33 @@
                 </select>
             </div>
 
-            <!-- Script Name (old appname-group) -->
+            <!-- Partition -->
+            <div v-show="cluster_name" id="partitions-group" class="form-group">
+                <label class="control-label">Partition: {{ partition_name }}</label>
+                    <select v-model="partition_name"
+                            v-on:input="selectPartition()"
+                            id='partition-select' 
+                            class="form-control">
+                     <option disabled value="">Please select a partition</option>
+                </select>
+            </div>
+
+            <div class="form-group" v-show="partition_name"> 
+
+                <!-- Qos --> 
+                <label class="control-label">Quality of service (qos): {{ qos_choice }}</label>
+                <select v-model="qos_choice"
+                        id='qos-select' 
+                        class="form-control">
+                        <option disabled value="">You can optionally select a qos</option>
+                        <option v-for="qos_option in qos">
+                        {{ qos_option }}
+                        </option>
+
+                </select>
+            </div>
+
+            <!-- Script Name -->
             <div id="script-group" class="form-group">
                 <label class="control-label">Script: {{ script_name }}</label>
                 <span class="help-block">Specify your script including the full path.</span>
@@ -84,7 +113,8 @@
 
             <!-- Job Name -->
             <div id="jobname-group" class="form-group">
-                <label class="control-label">Job Name: {{ job_name }}</label>
+                <label v-if="job_name" class="control-label">Job Name: {{ job_name }}.job</label>
+                <label v-else="job_name" class="control-label">Job Name:</label>
                 <input v-model.trim="job_name"
                        id="jobname-text" 
                        type="text" 
@@ -112,7 +142,7 @@
                            type="number" 
                            class="form-control" 
                            min="0" 
-                           value=0>
+                           value=1>
                     <span class="help-block">hours</span>
                 </div>
 
@@ -139,31 +169,41 @@
                 </div>
             </div>
 
-            <!-- Partition -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="partitions-group" class="form-group">
-                        <label class="control-label">Partition: {{ partition_name }}</label>
-                        <select v-model="partition_name"
-                                id='partition-select' 
-                                class="form-control">
-                            <option value="normal">normal</option>
-                            <option value="dev">dev</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <div id="output-group" class="form-group">                
 
-            <!-- Number nodes -->
-            <div id="nodes-group" class="form-group">
-                <label class="control-label">Number of Nodes: {{ number_nodes }}</label>
-                <span class="help-block">How many nodes are used?</span>
-                <input v-model.number="number_nodes"
-                       id="nodes-text" 
-                       type="number" 
-                       class="form-control" 
-                       min="1" 
-                       value=1>
+                <!-- Number nodes -->
+                <div id="nodes-group" class="col-md-4">
+                    <label class="control-label">Number of Nodes: {{ number_nodes }}</label>
+                    <input v-model.number="number_nodes"
+                           id="nodes-text" 
+                           type="number" 
+                           class="form-control" 
+                           min="1" 
+                           value=1>
+                </div>
+
+                <!-- Output File --> 
+                <div class="col-md-4">
+
+                    <label v-if="output_file" class="control-label">Output File: {{ output_file }}.%j.out</label>
+                    <label v-else="output_file" class="control-label">Output File:</label>
+                    <input v-model.trim="output_file"
+                           type="text" 
+                           id="output_file" 
+                           class="form-control">
+                </div>
+
+                <!-- Error File -->
+                <div class="col-md-4">
+
+                    <label v-if="error_file" class="control-label">Error File: {{ error_file }}.%j.err</label>
+                    <label v-else="error_file" class="control-label">Error File:</label>
+                        <input v-model.trim="error_file"
+                               type="text" 
+                               id="error_file" 
+                               class="form-control">
+                </div>
+
             </div>
 
         </div>
@@ -174,11 +214,26 @@
             <div id="output-group" class="form-group">
                 <textarea v-model='output'
                           class="form-control" 
-                          rows="30" 
+                          rows="15" 
                           id="script-output" 
                           style="resize: vertical" 
                           readonly="true">{{ output }}</textarea>
             </div>
+
+
+            <!-- Features --> 
+            <label v-if="features" class="control-label">select features for {{ partition_name }}</label><br>
+ 
+            <ul class="list-group" 
+                id='features-list' 
+                v-show="features">
+                <li class="list-group-item"
+                    v-on:click="addFeature"
+                    v-for="feature in features">
+                    {{ feature }}
+               </li>
+            </ul>
+
         </div>
 
     </div>
@@ -199,6 +254,7 @@
     <br><br>
 
     <hr>
+
 </div>
 
     <!--  Scripts-->

@@ -44,17 +44,22 @@ def get_parser():
                         type=str, default='slurm.conf')
 
     parser.add_argument("--update", dest='update', 
-                        help='''Update an already existing machines.json (or other) file.''', 
+                        help='''Update an already existing machines.json (or other)''', 
                         default=False, action='store_true')
 
 
     parser.add_argument("--disclude-part", dest='disclude_part', 
-                        help='''One or more partitions, separated by commas, to disclude''', 
+                        help='''Partitions to disclude, separated by commas''', 
                         type=str, default=None)
 
 
     parser.add_argument("--print", dest='print', 
                         help="print to screen instead of saving to machines.json", 
+                        default=False, action='store_true')
+
+
+    parser.add_argument("--quiet", dest='quiet', 
+                        help='''Suppress all output (other than print)''', 
                         default=False, action='store_true')
 
 
@@ -81,15 +86,18 @@ def main():
     except:
         sys.exit(0)
 
-    if os.path.exists(args.outfile) and args.force is False and args.update is False:
-        print("%s already exists! Use --force to force overwrite." %args.outfile)
+    if os.path.exists(args.outfile) and args.force is False and args.update is False and args.print is False:
+        message("%s already exists! Use --force to force overwrite." %args.outfile)
         sys.exit(1)
+
+    print("Parsing %s, please wait!" %args.input)
 
     # If the user wants an update, the output file must exist
     if args.update is True:
         if not os.path.exists(args.outfile):
-            print("Cannot find %s to update. Did you specify the right path?" %args.outfile)
+            message("Cannot find %s to update. Did you specify the right path?" %args.outfile)
             sys.exit(1)
+        message("Found %s to update." %args.outfile,args.quiet)
         machines = read_json(args.outfile)
     else:
         machines = dict()
@@ -98,21 +106,26 @@ def main():
     disclude_part = None
     if args.disclude_part is not None:
         disclude_part = args.disclude_part.split(',')
-        print("%s will not be included." %', '.join(disclude_part))
+        message("%s will not be included." %', '.join(disclude_part),args.quiet)
+    else:
+        message("All partitions will be included.",args.quiet)
 
     input_files = args.input.split(',')
     for input_file in input_files: 
         if not os.path.exists(input_file):
-            print("Cannot find %s. Did you specify the right path?" %input_file)
-        sys.exit(1)
-        print("Parsing %s, please wait!" %(input_file))
+            message("Cannot find %s. Did you specify the right path?" %input_file)
+            sys.exit(1)
         cluster = parse_config(config_file=input_file)
+        cluster_names = ",".join(list(cluster.keys()))
+        message('Adding cluster %s' %(cluster_names),args.quiet)
         if disclude_part is not None:
-            cluster = disclude_partitions(cluster)    
+            cluster = disclude_partitions(cluster,disclude_part)  
         machines.update(cluster)
 
+    cluster_names = ",".join(list(machines.keys()))
+    message('Compiling clusters %s' %(cluster_names),args.quiet)
     if args.print is True:
-        print(machines)
+        message(json.dumps(machines, indent=4, sort_keys=True))
     else:
         write_json(machines,args.outfile)
 
@@ -120,6 +133,10 @@ def main():
 ########################################################################
 # Utils
 ########################################################################
+
+def message(text,quiet=False):
+    if not quiet:
+        print(text)
 
 def unpack_data(data):
     config = data['config']
@@ -205,7 +222,8 @@ def get_node_variables():
     return ["RealMemory",
             "Gres",
             "Weight",
-            "Feature"]
+            "Feature",
+            "Default"]
 
 
 
@@ -331,7 +349,7 @@ def parse_node_block(data):
 
 
 ########################################################################
-# Features
+# Features and Defaults
 ########################################################################
 
 def parse_features(data):
@@ -349,12 +367,24 @@ def parse_features(data):
                     features[partition] = features[partition] + new_features
     return features
 
+
+def find_defaults(data):
+    defaults = dict()
+    for key,datum in data.items():
+        if datum:
+            defaults[key] = []
+            for name,attributes in datum.items():
+                if "Default" in attributes:
+                    defaults[key].append(name)
+    return defaults
+
 ########################################################################
 # Partitions
 ########################################################################
 
 def get_partition_variables():
     return ["DefaultTime",
+            "Default",
             "DefMemPerCPU",
             "MaxMemPerCPU",
             "AllowQos",
@@ -373,6 +403,10 @@ def disclude_partitions(cluster,disclude_parts):
                     update = [x for x in cluster[cluster_name]['nodes'][node_name]['partitions']
                               if x not in disclude_parts]
                     cluster[cluster_name]['nodes'][node_name]['partitions'] = update
+        if "features" in attributes:
+            for disclude_part in disclude_parts:
+                if disclude_part in attributes['features']:
+                    del cluster[cluster_name]['features'][disclude_part]
     return cluster
 
 
@@ -413,6 +447,7 @@ def parse_partition_block(data):
                     nodes[node] = {'partitions':[partition_name]} 
             # Note, we don't add an exaustive list of nodes to each partition
             # But if we needed to, could do that here.
+            updates['maxNodes'] = len(parts)
             del updates['Nodes']
         new_partition.update(updates)    
     partitions[partition_name] = new_partition
@@ -437,7 +472,6 @@ def parse_config(config_file):
         if line.startswith('ClusterName'):
             line = data['config'].pop(0)
             cluster = parse_line_multi(line)['ClusterName']
-            print('Found cluster %s' %(cluster))
         elif line.startswith('PartitionName'):
             data = parse_partition_block(data)
         elif line.startswith('NodeName'):
@@ -445,12 +479,17 @@ def parse_config(config_file):
         else:
             data['config'].pop(0)
 
-    # Finally, we want to know features for each partition
+    # Calculate features for each partition
     machines[cluster] = dict()
     machines[cluster]['features'] = parse_features(data)
 
+    # Find Defaults
+    machines[cluster]['defaults'] = find_defaults(data)
+
     del data['config']
     machines[cluster].update(data)
+
+
 
     return machines
 
