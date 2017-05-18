@@ -30,10 +30,13 @@
             </a>
 
             <!-- Top Navigation to show user where they are -->
-            <nav v-bind:class="active" v-on:click.prevent>
+            <nav v-bind:class="active">
                 <a href="#" class="generate" 
                             style="font-weight:800" 
                             v-on:click="makeActive('generate')">Stanford Compute Job Maker</a>
+                <a style="float:right; padding:10px 15px 0px 0px;" 
+                   href="https://www.github.com/researchapps/job-maker" 
+                   target="_blank"><i class="fa fa-2x fa-github"></i></a>
             </nav>
 
             <p style="display:none">You chose <b>{{ active }}</b></p>
