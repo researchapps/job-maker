@@ -210,7 +210,6 @@ var cluster = new Vue({
 
            // Qos
            var partition_name = $("#partition-select").val() || choice.defaults.partitions[0]
-           console.log(self.machines[self.cluster_name]['partitions'][partition_name])
            this.qos = self.machines[self.cluster_name].partitions[partition_name].AllowQos.split(',')
 
            // Features
