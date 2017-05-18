@@ -169,10 +169,10 @@
                 </div>
             </div>
 
-            <div id="output-group" class="form-group">                
+            <div id="nodes-group" class="form-group">
 
                 <!-- Number nodes -->
-                <div id="nodes-group" class="col-md-4">
+                <div id="number-nodes-group" class="col-md-6">
                     <label class="control-label">Number of Nodes: {{ number_nodes }}</label>
                     <input v-model.number="number_nodes"
                            id="nodes-text" 
@@ -182,8 +182,25 @@
                            value=1>
                 </div>
 
+                <!-- Memory -->
+                <div id="memory-group" class="col-md-6">
+                    <label class="control-label">Memory: {{ memory }}</label>
+                    <input v-model.number="memory"
+                           id="memory-text" 
+                           type="number" 
+                           class="form-control" 
+                           min="1" 
+                           value=1200>
+                </div>
+
+
+
+            </div>
+
+            <div id="output-group" class="form-group">                
+
                 <!-- Output File --> 
-                <div class="col-md-4">
+                <div class="col-md-6">
 
                     <label v-if="output_file" class="control-label">Output File: {{ output_file }}.%j.out</label>
                     <label v-else="output_file" class="control-label">Output File:</label>
@@ -194,7 +211,7 @@
                 </div>
 
                 <!-- Error File -->
-                <div class="col-md-4">
+                <div class="col-md-6">
 
                     <label v-if="error_file" class="control-label">Error File: {{ error_file }}.%j.err</label>
                     <label v-else="error_file" class="control-label">Error File:</label>

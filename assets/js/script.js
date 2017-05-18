@@ -50,6 +50,7 @@ var cluster = new Vue({
     data: {
         machines: null,
         features: null,
+        memory:null,
         qos: null,
         qos_choice: null,
         cluster_name: '',
@@ -145,6 +146,15 @@ var cluster = new Vue({
                   var partition = self.partition_name;
               }
 
+              // Is the memory specified greater than max allowed?
+               var max_memory = Number(choice.partitions[partition].MaxMemPerCPU)
+               if (this.memory!=null) {
+                    if(this.memory > max_memory){
+                        nav.warning = 'The max memory for this parition cannot be greater than ' + max_memory + '.'
+                        this.memory = max_memory
+                    }
+               }
+
               var max_nodes = Number(choice.partitions[partition].maxNodes);            
 
               if ((self.number_nodes > max_nodes) || (self.number_nodes < 1)) {
@@ -215,6 +225,12 @@ var cluster = new Vue({
            // Features
            this.features = self.machines[self.cluster_name].features[partition_name]
 
+           //Max memory
+           var max_memory = self.machines[self.cluster_name].partitions[partition_name].MaxMemPerCPU
+           if (this.memory!=null) {
+               this.memory = null;
+           }
+
         },
 
         writeHeader: function() {
@@ -228,6 +244,10 @@ var cluster = new Vue({
 
             if (this.qos_choice!=null) {
                 header+='#SBATCH --qos='+this.qos_choice+'\n';
+            }
+
+            if (this.memory!=null) {
+                header+='#SBATCH --mem='+this.memory+'\n';
             }
 
             // Add any user features
