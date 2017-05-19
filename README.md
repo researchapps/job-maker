@@ -2,6 +2,10 @@
 
 Making SLURM (or other) job scripts to submit jobs to a [SLURM cluster](https://en.wikipedia.org/wiki/Slurm_Workload_Manager) is annoying. Research Computing at Stanford, [inspired by NERSC](https://my.nersc.gov/script_generator.php), have created this static tool that you (some cluster admin) can tweak the configuration for, and then serve statically for your users.
 
+[The Job Maker](http://oss.stanford.edu/job-maker)
+
+![assets/img/job-maker.png](assets/img/job-maker.png)
+
 ## What does it do?
 
 Give the [demo](https://oss.stanford.edu/job-maker) a try! Essentially, you have a simple web interface to help your users generate job scripts to submit on your cluster(s). This comes together with a static [index.html](index.html), a [javascript backend](assets/js/script.js) driven by [Vue.js](https://vuejs.org/), and a small [helper script](helpers/slurm2json.py) to generate the required [data](data) to run the application.
