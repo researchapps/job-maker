@@ -33,6 +33,6 @@ if [ "${RETVAL}" == "0" ]; then
     cp -R /code/assets /data/assets
     mkdir -p /data/data
     mv /tmp/machines.json /data/data/machines.json
-    chmod -R 0755 /data
+    chmod -R g+rwX /data
     tree /data -L 1
 fi
