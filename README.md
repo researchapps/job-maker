@@ -1,14 +1,23 @@
 # Job Maker
 
-Making SLURM (or other) job scripts to submit jobs to a [SLURM cluster](https://en.wikipedia.org/wiki/Slurm_Workload_Manager) is annoying. Research Computing at Stanford, [inspired by NERSC](https://my.nersc.gov/script_generator.php), have created this static tool that you (some cluster admin) can tweak the configuration for, and then serve statically for your users.
+Making SLURM (or other) job scripts to submit jobs to a 
+[SLURM cluster](https://en.wikipedia.org/wiki/Slurm_Workload_Manager) is annoying. 
+Research Computing at Stanford, [inspired by NERSC](https://my.nersc.gov/script_generator.php), 
+have created this static tool that you (some cluster admin) can tweak the 
+configuration for, and then serve statically for your users.
 
-[The Job Maker](http://oss.stanford.edu/job-maker)
+[The Job Maker](https://researchapps.github.io/job-maker/)
 
 ![assets/img/job-maker.png](assets/img/job-maker.png)
 
 ## What does it do?
 
-Give the [demo](https://oss.stanford.edu/job-maker) a try! Essentially, you have a simple web interface to help your users generate job scripts to submit on your cluster(s). This comes together with a static [index.html](index.html), a [javascript backend](assets/js/script.js) driven by [Vue.js](https://vuejs.org/), and a small [helper script](helpers/slurm2json.py) to generate the required [data](data) to run the application.
+Give the [demo](https://researchapps.github.io/job-maker/) a try! Essentially, 
+you have a simple web interface to help your users generate job scripts to 
+submit on your cluster(s). This comes together with a static [index.html](index.html), 
+a [javascript backend](assets/js/script.js) driven by [Vue.js](https://vuejs.org/), 
+and a small [helper script](helpers/slurm2json.py) to generate the required 
+[data](data) to run the application.
 
 
 ### The Machines.json Data Structure
@@ -46,7 +55,9 @@ We parse the [slurm.conf](https://slurm.schedmd.com/slurm.conf.html) to generate
 ```
 
 #### Parititions
-A partition is a group of nodes with a particular qos (quality of service), with defaults for time, maximumm memory, and memory per CPU. For example, `slurm2json.py` will return this for my graduate school lab's partition:
+A partition is a group of nodes with a particular qos (quality of service), with 
+defaults for time, maximumm memory, and memory per CPU. For example, `slurm2json.py` 
+will return this for my graduate school lab's partition:
 
 ```
 { "russpold"
@@ -60,7 +71,9 @@ A partition is a group of nodes with a particular qos (quality of service), with
 ```
 
 #### Nodes
-A node of course, is a node. It usually is associated with one or more partitions, which means different groups are allowed to use it. `slurm2json.py` might parse a node that looks like this:
+A node of course, is a node. It usually is associated with one or more partitions, 
+which means different groups are allowed to use it. `slurm2json.py` might parse a 
+node that looks like this:
 
 ```
 'sh-18-25': {'Feature': '"CPU_HSW,E5-2640v3,2.60GHz,NOACCL,NOACCL"',
@@ -72,35 +85,55 @@ A node of course, is a node. It usually is associated with one or more partition
 ```
 
 #### Features
-Features are attributes for a node, that (I think) we are allowed to define. For this application, I decided to make Features indexed by partitions, so when the user selects a partition, we can look up features available for it.  Here are features available for the `russpold` partition:
+Features are attributes for a node, that (I think) we are allowed to define. 
+For this application, I decided to make Features indexed by partitions, so when 
+the user selects a partition, we can look up features available for it.  Here are 
+features available for the `russpold` partition:
 
 ```
  'russpold': ['CPU_IVY', 'E5-2650v2', '2.60GHz', 'NOACCL', 'NOACCL'],
 ```
 
 #### Defaults
-I noticed that some partitions and nodes have a "Default" indicator as a variable, and so I parse a lookup for defaults, for each general category of `partitions`, and `nodes`. In the case of my test file, I found that `normal` was the default partition:
+I noticed that some partitions and nodes have a "Default" indicator as a variable, 
+and so I parse a lookup for defaults, for each general category of `partitions`, 
+and `nodes`. In the case of my test file, I found that `normal` was the default partition:
 
 ```
 {'nodes': [], 'partitions': ['normal']}
 ```
 
-And I would then select this partition for the user if he/she did not select one. I (@vsoch) came up with the organization primarily to be able to look things up in the web interface as needed. There are definitely other ways to go about it.
+And I would then select this partition for the user if he/she did not select one.
+ I (@vsoch) came up with the organization primarily to be able to look things up 
+in the web interface as needed. There are definitely other ways to go about it.
 
 
 ### Why slurm.conf?
-I chose to parse the `slurm.conf` and not require any additional permissions (e.g., reading a database or using any command that requires root) so that any slurm user can generate the structure. You can of course imagine other organizations, or even uses for this data structure outside of this small application, and if you want to chat please [post an issue](https://www.github.com/researchapps/job-maker/issues)!
+I chose to parse the `slurm.conf` and not require any additional permissions (e.g., 
+reading a database or using any command that requires root) so that any slurm user 
+can generate the structure. You can of course imagine other organizations, or 
+even uses for this data structure outside of this small application, and if you 
+want to chat please [post an issue](https://www.github.com/researchapps/job-maker/issues)!
 
 
 ## Configuration
 
-The configuration and specification for your cluster is defined by files in the [assets/data](assets/data) folder. We generated these files from the `slurm.conf` directly, which is usually located at `/etc/slurm/slurm.conf`. You have a few options for generating these data files:
+The configuration and specification for your cluster is defined by files in the 
+[assets/data](assets/data) folder. We generated these files from the `slurm.conf` 
+directly, which is usually located at `/etc/slurm/slurm.conf`. You have a few 
+options for generating these data files:
 
 ### Option 2. Manual
-If you don't want to generate the file programatically, you can manually enter values for your cluster. A template / example file for you to start from is provided in [helpers/templates](helpers/templates).
+If you don't want to generate the file programatically, you can manually enter 
+values for your cluster. A template / example file for you to start from is
+provided in [helpers/templates](helpers/templates).
 
 ### Option 1. Programmatic
-In the helpers folder, we have provided a command line executable, [slurm2json.py](helpers/slurm2json.py) that can be run with the `slurm.conf` to generate the required data files. You have a few ways to run this, depending on the number of clusters and level of filtering you want to apply to each. First, take a look at the usage:
+In the helpers folder, we have provided a command line executable, 
+[slurm2json.py](helpers/slurm2json.py) that can be run with the `slurm.conf` 
+to generate the required data files. You have a few ways to run this, 
+depending on the number of clusters and level of filtering you want to apply 
+to each. First, take a look at the usage:
 
 
 ```
@@ -125,7 +158,8 @@ optional arguments:
 ```
 
 #### Quick Start
-If you need to generate a `machines.json` for one cluster, the simplest thing to do would be to cd to the folder with your `slurm.conf`, and generate the file:
+If you need to generate a `machines.json` for one cluster, the simplest 
+thing to do would be to cd to the folder with your `slurm.conf`, and generate the file:
 
 ```
 git clone https://www.github.com/researchapps/job-maker
@@ -155,21 +189,24 @@ Or if you want to change the name of the input file, that works too:
 python slurm2json.py --input slurm-corn.conf
 ```
 
-You can also specify more than one slurm configuration for input, and they will both be parsed as separate clusters in the `machines.json` output file.
+You can also specify more than one slurm configuration for input, and they will 
+both be parsed as separate clusters in the `machines.json` output file.
 
 ```
 python slurm2json.py --input slurm-corn.conf,slurm.conf
 ```
 
 ###### Force
-By default, if you have a `machines.json` already existing and you try to overwrite it, you will get an error:
+By default, if you have a `machines.json` already existing and you try to 
+overwrite it, you will get an error:
 
 ```
 python slurm2json.py
 machines.json already exists! Use --force to force overwrite.
 ```
 
-But if you make a mistake and need to overwrite (or want the script to run automatically and force update the file) just use force:
+But if you make a mistake and need to overwrite (or want the script to run 
+automatically and force update the file) just use force:
 
 ```
 python slurm2json.py --force
@@ -196,7 +233,8 @@ If you aren't ready to write to file, you can preview the output by appending `-
 python slurm2json.py --input slurm.conf --print
 ```
 
-When used with `--print`, the message output will not be included with the print so that you could pipe the output to file, if desired:
+When used with `--print`, the message output will not be included with the 
+print so that you could pipe the output to file, if desired:
 
 ```
 python slurm2json.py --input slurm.conf --quiet >> output.json
@@ -206,7 +244,8 @@ Whatever floats yer' boat, Harry.
 
 
 #### Filters
-It might be the case that you want to disclude particular partitions. To do this, simply specify their names:
+It might be the case that you want to disclude particular partitions. To do this, 
+simply specify their names:
 
 
 ```
@@ -219,7 +258,10 @@ python slurm2json.py --disclude-partition normal,dev
 
 
 #### Multiple Clusters
-Most institutions have multiple clusters, and would want their users to be able to select a cluster, and then filter down. To specify the `machines.json` to be generated for multiple clusters, you should specify the `--input` command, but provide several comma separated slurm configuation files:
+Most institutions have multiple clusters, and would want their users to be able 
+to select a cluster, and then filter down. To specify the `machines.json` to be 
+generated for multiple clusters, you should specify the `--input` command, but 
+provide several comma separated slurm configuation files:
 
 ```
 python slurm2json.py --input slurm.conf,slurm-corn.conf
@@ -231,13 +273,19 @@ Compiling clusters sherlock,farmshare2
 ```
 
 #### Multiple Clusters with Filters
-If you have a filter to apply across all clusters, then you can generate as above, and add the filter:
+If you have a filter to apply across all clusters, then you can generate as above, 
+and add the filter:
 
 ```
 python slurm2json.py --input slurm.conf,slurm-corn.conf --disclude-part normal,dev
 ```
 
-and in the example above, `normal` and `dev` would be discluded from both clusters defined in the two configuration files, given that they exist. However, if you have two clusters with a shared name but you only want to disclude a partition from one, then you should generate the `machines.json` for one cluster, and update it by adding the second. To do this you first generate `machines.json` for your first file:
+and in the example above, `normal` and `dev` would be discluded from both clusters 
+defined in the two configuration files, given that they exist. However, if you have 
+two clusters with a shared name but you only want to disclude a partition 
+from one, then you should generate the `machines.json` for one cluster, and 
+update it by adding the second. To do this you first generate `machines.json` 
+for your first file:
 
 ```
 python slurm2json.py --input slurm.conf                                  # include normal and dev
@@ -259,7 +307,11 @@ Adding cluster farmshare2
 Compiling clusters farmshare2,sherlock
 ```
 
-You can use the update command, of course, to update or add a new cluster. If I run the above command again with a cluster already represented with `--update`, the entire cluster entry will be updated. Since `--update` by default must update an existing file, `--force` is implied, and an error message is issued if the file to update is not present..
+You can use the update command, of course, to update or add a new cluster. 
+If I run the above command again with a cluster already represented with `--update`, 
+the entire cluster entry will be updated. Since `--update` by default must update 
+an existing file, `--force` is implied, and an error message is issued if the file 
+to update is not present..
 
 If you need further functionality, please [create an issue](https://www.github.com/researchapps/job-maker/issues)
 

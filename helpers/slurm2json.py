@@ -3,9 +3,7 @@
 '''
 slurm2json.py: convert a slurm.conf to a machines.json input file
 
-The MIT License (MIT)
-
-Copyright (c) 2017 Vanessa Sochat
+Copyright (c) 2017-2019 Vanessa Sochat
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,9 +37,8 @@ def get_parser():
     description="convert slurm.conf to machines.json")
 
     parser.add_argument("--input", dest='input', 
-                        help='''path to one or more slurm config files, separated by commas. 
-                                Default is one slurm.conf in present working directory.''', 
-                        type=str, default='slurm.conf')
+                        help='''one or more slurm config files, separated by commas.''', 
+                        type=str, default=None)
 
     parser.add_argument("--update", dest='update', 
                         help='''Update an already existing machines.json (or other)''', 
@@ -86,18 +83,24 @@ def main():
     except:
         sys.exit(0)
 
-    if os.path.exists(args.outfile) and args.force is False and args.update is False and args.print is False:
-        message("%s already exists! Use --force to force overwrite." %args.outfile)
+    # User must specify a slurm.conf
+    if args.input == None:
+        parser.print_help()
+        message('Please supply a slurm.conf with --input.', args.quiet)
         sys.exit(1)
 
-    print("Parsing %s, please wait!" %args.input)
+    if os.path.exists(args.outfile) and args.force is False and args.update is False and args.print is False:
+        message("%s already exists! Use --force to force overwrite." % args.outfile)
+        sys.exit(1)
+
+    print("Parsing %s, please wait!" % args.input)
 
     # If the user wants an update, the output file must exist
     if args.update is True:
         if not os.path.exists(args.outfile):
-            message("Cannot find %s to update. Did you specify the right path?" %args.outfile)
+            message("Cannot find %s. Did you specify the right path?" % args.outfile)
             sys.exit(1)
-        message("Found %s to update." %args.outfile,args.quiet)
+        message("Found %s to update." % args.outfile, args.quiet)
         machines = read_json(args.outfile)
     else:
         machines = dict()
@@ -113,7 +116,7 @@ def main():
     input_files = args.input.split(',')
     for input_file in input_files: 
         if not os.path.exists(input_file):
-            message("Cannot find %s. Did you specify the right path?" %input_file)
+            message("Cannot find %s. Did you specify the right path?" % input_file)
             sys.exit(1)
         cluster = parse_config(config_file=input_file)
         cluster_names = ",".join(list(cluster.keys()))
@@ -130,9 +133,9 @@ def main():
         write_json(machines,args.outfile)
 
 
-########################################################################
+################################################################################
 # Utils
-########################################################################
+################################################################################
 
 def message(text,quiet=False):
     if not quiet:
@@ -214,9 +217,9 @@ def parse_line_multi(line,keepers=None):
 
 
 
-########################################################################
+################################################################################
 # Nodes
-########################################################################
+################################################################################
 
 def get_node_variables():
     return ["RealMemory",
@@ -256,7 +259,8 @@ def break_range_expressions(node_name):
 
 def parse_single_node(node_name):
     '''this function will parse a single string to describe a group of 
-    nodes, eg gpu-27-{21,35}'''
+       nodes, eg gpu-27-{21,35}
+    '''
     parts = break_range_expressions(node_name)
     options = []
     for part in parts:
@@ -284,22 +288,24 @@ def parse_single_node(node_name):
 
 
 def parse_node_names(line):
-    '''parse_node_names will take a whole list of nodes (multiple with ranges and
-    lists in brackets) and return a list of unique, complete names.'''
+    '''parse_node_names will take a whole list of nodes (multiple with 
+       ranges and lists in brackets) and return a list of unique, 
+       complete names.
+    '''
     new_nodes = []
     #nodelist = re.sub("\\\\| ","",line).split('=')[-1]
-    nodelist = re.sub("\\\\| ","",line)
+    nodelist = re.sub("\\\\| ","", line)
     nodelist = nodelist.replace('[','{').replace(']','}')
     nodelist = re.split(',\s*(?![^{}]*\})', nodelist)
     for node_name in nodelist:
         contenders = [x for x in parse_single_node(node_name) if x not in new_nodes]
         new_nodes = new_nodes + contenders
-    return new_nodes
+    return list(set(new_nodes))
 
 def keep_going(name):
     '''A function to filter a string to determine if
-    the calling function should continue. Returns False
-    if the string being checked contains any flag variables.
+       the calling function should continue. Returns False
+       if the string being checked contains any flag variables.
     '''
     skip_these = ['DEFAULT','test']
     go_on = True
@@ -311,15 +317,15 @@ def keep_going(name):
 
 def parse_node_block(data):
     '''line should be the first line popped that has 'NodeName'
-    and config is the entire config following that. The new node
-    entry is added to the global nodes.
+       and config is the entire config following that. The new node
+       entry is added to the global nodes.
     '''
-    config,nodes,partitions = unpack_data(data)
+    config, nodes, partitions = unpack_data(data)
 
     line = parse_line_multi(config.pop(0))
 
     if "NodeName" not in line:
-        return pack_data(config,nodes,partitions)
+        return pack_data(config, nodes, partitions)
 
     node = line['NodeName']
     if not keep_going(node):
@@ -328,6 +334,7 @@ def parse_node_block(data):
     # Get all variables for node group
     keepers = get_node_variables()
     node_names = parse_node_names(node)
+
     del line['NodeName']
     node_settings = line
     done = False
@@ -336,7 +343,7 @@ def parse_node_block(data):
         line = remove_comments(config.pop(0))
         if not line.endswith('\\'):
             done = True
-        updates = parse_line_multi(line,keepers)
+        updates = parse_line_multi(line, keepers)
         node_settings.update(updates)
 
     for node in node_names:
@@ -348,9 +355,9 @@ def parse_node_block(data):
     return pack_data(config,nodes,partitions)
 
 
-########################################################################
+################################################################################
 # Features and Defaults
-########################################################################
+################################################################################
 
 def parse_features(data):
     config,nodes,partitions = unpack_data(data)
@@ -370,17 +377,17 @@ def parse_features(data):
 
 def find_defaults(data):
     defaults = dict()
-    for key,datum in data.items():
+    for key, datum in data.items():
         if datum:
             defaults[key] = []
-            for name,attributes in datum.items():
+            for name, attributes in datum.items():
                 if "Default" in attributes:
                     defaults[key].append(name)
     return defaults
 
-########################################################################
+################################################################################
 # Partitions
-########################################################################
+################################################################################
 
 def get_partition_variables():
     return ["DefaultTime",
@@ -416,12 +423,12 @@ def parse_partition_block(data):
     entry is added to the global partitions. The next line (non partition)
     is returned.
     '''
-    config,nodes,partitions = unpack_data(data)
+    config, nodes, partitions = unpack_data(data)
 
     line = parse_line_multi(config.pop(0))
  
     if "PartitionName" not in line:
-        return pack_data(config,nodes,partitions)
+        return pack_data(config, nodes, partitions)
 
     partition_name = line['PartitionName']
     keepers = get_partition_variables()
@@ -445,18 +452,20 @@ def parse_partition_block(data):
                         nodes[node]['partitions'].append(partition_name)
                 else:
                     nodes[node] = {'partitions':[partition_name]} 
+
             # Note, we don't add an exaustive list of nodes to each partition
             # But if we needed to, could do that here.
             updates['maxNodes'] = len(parts)
             del updates['Nodes']
+
         new_partition.update(updates)    
     partitions[partition_name] = new_partition
     return pack_data(config,nodes,partitions)
 
 
-########################################################################
+################################################################################
 # Main Parser
-########################################################################
+################################################################################
 
 def parse_config(config_file):
     '''parse a config file to return a complete list of machines
@@ -467,6 +476,9 @@ def parse_config(config_file):
             'nodes': {},
             'config':config}
 
+    # If the configuration file doesn't have a cluster
+    cluster = "default"
+
     while data['config']:
         line = data['config'][0]
         if line.startswith('ClusterName'):
@@ -475,7 +487,7 @@ def parse_config(config_file):
         elif line.startswith('PartitionName'):
             data = parse_partition_block(data)
         elif line.startswith('NodeName'):
-            data = parse_node_block(data)        
+            data = parse_node_block(data) 
         else:
             data['config'].pop(0)
 
@@ -488,8 +500,6 @@ def parse_config(config_file):
 
     del data['config']
     machines[cluster].update(data)
-
-
 
     return machines
 
