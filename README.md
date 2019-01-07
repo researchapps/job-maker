@@ -126,8 +126,8 @@ options for generating these data files:
 ## Option 1. Docker
 
 We've provided a [Dockerfile](docker/Dockerfile) in this repository that
-will generate the entire compressed output for you! First, create a temporary
-directory to bind to the container:
+will generate the entire compressed output for you! The container
+is available on [Docker Hub](https://cloud.docker.com/repository/registry-1.docker.io/vanessa/job-maker). First, create a temporary directory to bind to the container:
 
 ```bash
 mkdir -p /tmp/jobmaker
