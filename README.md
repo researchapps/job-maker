@@ -183,7 +183,10 @@ nav {
 }
 ```
 
-Have fun!
+Have fun! The same customizations to the slurm2json.py command can be given to the 
+entrypoint, with the one exception of `--outfile`. Since we need to generate
+the file in a predictable place inside the container, you shouldn't set this
+because it's set for you.
 
 ## Option 2. Manual
 If you don't want to generate the file programatically, you can manually enter 
