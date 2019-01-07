@@ -20,7 +20,7 @@ and a small [helper script](helpers/slurm2json.py) to generate the required
 [data](data) to run the application.
 
 
-### The Machines.json Data Structure
+## The Machines.json Data Structure
 We parse the [slurm.conf](https://slurm.schedmd.com/slurm.conf.html) to generate a single data structure that has this hierarchy:
 
 ```
@@ -54,7 +54,7 @@ We parse the [slurm.conf](https://slurm.schedmd.com/slurm.conf.html) to generate
   
 ```
 
-#### Parititions
+### Parititions
 A partition is a group of nodes with a particular qos (quality of service), with 
 defaults for time, maximumm memory, and memory per CPU. For example, `slurm2json.py` 
 will return this for my graduate school lab's partition:
@@ -70,7 +70,7 @@ will return this for my graduate school lab's partition:
 }
 ```
 
-#### Nodes
+### Nodes
 A node of course, is a node. It usually is associated with one or more partitions, 
 which means different groups are allowed to use it. `slurm2json.py` might parse a 
 node that looks like this:
@@ -84,7 +84,7 @@ node that looks like this:
                  'owners']}
 ```
 
-#### Features
+### Features
 Features are attributes for a node, that (I think) we are allowed to define. 
 For this application, I decided to make Features indexed by partitions, so when 
 the user selects a partition, we can look up features available for it.  Here are 
@@ -94,7 +94,7 @@ features available for the `russpold` partition:
  'russpold': ['CPU_IVY', 'E5-2650v2', '2.60GHz', 'NOACCL', 'NOACCL'],
 ```
 
-#### Defaults
+### Defaults
 I noticed that some partitions and nodes have a "Default" indicator as a variable, 
 and so I parse a lookup for defaults, for each general category of `partitions`, 
 and `nodes`. In the case of my test file, I found that `normal` was the default partition:
@@ -108,7 +108,7 @@ And I would then select this partition for the user if he/she did not select one
 in the web interface as needed. There are definitely other ways to go about it.
 
 
-### Why slurm.conf?
+## Why slurm.conf?
 I chose to parse the `slurm.conf` and not require any additional permissions (e.g., 
 reading a database or using any command that requires root) so that any slurm user 
 can generate the structure. You can of course imagine other organizations, or 
@@ -116,19 +116,81 @@ even uses for this data structure outside of this small application, and if you
 want to chat please [post an issue](https://www.github.com/researchapps/job-maker/issues)!
 
 
-## Configuration
+# Configuration
 
 The configuration and specification for your cluster is defined by files in the 
 [assets/data](assets/data) folder. We generated these files from the `slurm.conf` 
 directly, which is usually located at `/etc/slurm/slurm.conf`. You have a few 
 options for generating these data files:
 
-### Option 2. Manual
+## Option 1. Docker
+
+We've provided a [Dockerfile](docker/Dockerfile) in this repository that
+will generate the entire compressed output for you! First, create a temporary
+directory to bind to the container:
+
+```bash
+mkdir -p /tmp/jobmaker
+```
+
+Next, copy your slurm.conf there.
+
+```bash
+cp slurm.conf /tmp/jobmaker
+```
+
+Finally, run the container, bind this directory to `/data` in the container,
+and provide the path to slurm.conf (from within the container):
+
+```bash
+docker run --volume /tmp/jobmaker:/data vanessa/job-maker --input /data/slurm.conf
+Parsing /data/slurm.conf, please wait!
+All partitions will be included.
+Adding cluster sherlock
+Compiling clusters sherlock
+Successful generation! Writing output to /data...
+/data
+├── LICENSE
+├── README.md
+├── assets
+├── data
+├── index.html
+└── slurm.conf
+
+2 directories, 4 files
+```
+
+You should then be able to copy those static files to your web server, and deploy 
+the job maker. You can also test locally with python:
+
+```bash
+cd /tmp/jobmaker
+python -m http.server 9999
+```
+
+If you want to change the logo, just replace the file at `assets/img/logo.png`.
+You can also tweak the colors and styling of the page in `assets/css/style.css`.
+For example, to change the color (red) of the navigation bar, change the
+background-color here:
+
+```css
+nav {
+    display: inline-block;
+    margin-left: 50px auto;
+    background-color: #be100f;
+    border-radius: 2px;
+    width: 90%;
+}
+```
+
+Have fun!
+
+## Option 2. Manual
 If you don't want to generate the file programatically, you can manually enter 
 values for your cluster. A template / example file for you to start from is
 provided in [helpers/templates](helpers/templates).
 
-### Option 1. Programmatic
+## Option 3. Local
 In the helpers folder, we have provided a command line executable, 
 [slurm2json.py](helpers/slurm2json.py) that can be run with the `slurm.conf` 
 to generate the required data files. You have a few ways to run this, 
@@ -158,6 +220,7 @@ optional arguments:
 ```
 
 #### Quick Start
+
 If you need to generate a `machines.json` for one cluster, the simplest 
 thing to do would be to cd to the folder with your `slurm.conf`, and generate the file:
 
@@ -315,6 +378,28 @@ to update is not present..
 
 If you need further functionality, please [create an issue](https://www.github.com/researchapps/job-maker/issues)
 
+# Development
+
+If you want to build the container locally, after cloning the repository
+you should issue this command from the root of it:
+
+```bash
+$ docker build -f docker/Dockerfile -t vanessa/job-maker .
+```
+
+To interactively shell inside to test:
+
+```bash
+$ docker run --entrypoint bash -it vanessa/job-maker
+```
+
+If you want to test binding your temporary directory with a slurm.conf:
+
+```bash
+$ docker run --entrypoint bash --volume /tmp/jobmaker:/data -it vanessa/job-maker
+# ls /data
+slurm.conf
+```
 
 ## Credits
 
