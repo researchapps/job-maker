@@ -188,13 +188,54 @@ entrypoint, with the one exception of `--outfile`. Since we need to generate
 the file in a predictable place inside the container, you shouldn't set this
 because it's set for you.
 
-## Option 2. Manual
+## Option 2. Singularity
+
+You can use the same Docker container, but with Singularity! Again, first
+make the directory for your interface, and copy your slurm.conf there:
+
+```bash
+mkdir -p /tmp/jobmaker
+cp slurm.conf /tmp/jobmaker
+```
+
+Now pull the job-maker container as a Singularity image. It's useful to pull
+first in case you want to do it again.
+
+```bash
+$ singularity pull --name job-maker.simg docker://vanessa/job-maker
+```
+
+Again run the container, bind this directory to `/data` in the container,
+and provide the path to slurm.conf (from within the container):
+
+```bash
+$ singularity run --bind /tmp/jobmaker:/data job-maker.simg --input /data/slurm.conf
+Parsing /data/slurm.conf, please wait!
+All partitions will be included.
+Adding cluster sherlock
+Compiling clusters sherlock
+Successful generation! Writing output to /data...
+/data
+├── LICENSE
+├── README.md
+├── assets
+├── data
+├── index.html
+└── slurm.conf
+
+2 directories, 4 files
+```
+
+You can again copy those static files to your web server, and deploy 
+the job maker, and test locally with a python web server (see Docker instructions above).
+
+## Option 3. Manual
 
 If you don't want to generate the file programatically, you can manually enter 
 values for your cluster. A template / example file for you to start from is
 provided in [helpers/templates](helpers/templates).
 
-## Option 3. Local
+## Option 4. Local
 
 In the helpers folder, we have provided a command line executable, 
 [slurm2json.py](helpers/slurm2json.py) that can be run with the `slurm.conf` 
