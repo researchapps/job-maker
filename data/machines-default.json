@@ -1,0 +1,309 @@
+{
+    "cluster": {
+        "features": {},
+        "defaults": {
+            "nodes": [
+                "linux5",
+                "linux31",
+                "linux9",
+                "linux2",
+                "linux8",
+                "linux4",
+                "linux19",
+                "linux15",
+                "linux11",
+                "linux30",
+                "linux16",
+                "linux29",
+                "linux10",
+                "linux25",
+                "linux3",
+                "linux13",
+                "linux21",
+                "linux1",
+                "linux14",
+                "linux20",
+                "linux12",
+                "linux32",
+                "linux7",
+                "linux27",
+                "linux28",
+                "linux22",
+                "linux17",
+                "linux18",
+                "linux24",
+                "linux23",
+                "linux6",
+                "linux26"
+            ]
+        },
+        "nodes": {
+            "linux5": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux31": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux9": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux2": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux8": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux4": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux19": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux15": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux11": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux30": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux16": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux29": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux10": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux25": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux3": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux13": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux21": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux1": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux14": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux20": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux12": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux32": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux7": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux27": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux28": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux22": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux17": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux18": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux24": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux23": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux6": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            },
+            "linux26": {
+                "CPUs": "1",
+                "State": "UNKNOWN",
+                "Default": "YES",
+                "partitions": [
+                    "normal"
+                ]
+            }
+        },
+        "partitions": {
+            "normal": {
+                "maxNodes": 32,
+                "DefaultTime": "2:0:0",
+                "DefMemPerCPU": "12000",
+                "PartitionName": "normal",
+                "Default": "YES",
+                "MaxMemPerCPU": "12800"
+            }
+        }
+    }
+}
