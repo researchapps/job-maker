@@ -21,6 +21,7 @@ and a small [helper script](helpers/slurm2json.py) to generate the required
 
 
 ## The Machines.json Data Structure
+
 We parse the [slurm.conf](https://slurm.schedmd.com/slurm.conf.html) to generate a single data structure that has this hierarchy:
 
 ```
@@ -55,6 +56,7 @@ We parse the [slurm.conf](https://slurm.schedmd.com/slurm.conf.html) to generate
 ```
 
 ### Parititions
+
 A partition is a group of nodes with a particular qos (quality of service), with 
 defaults for time, maximumm memory, and memory per CPU. For example, `slurm2json.py` 
 will return this for my graduate school lab's partition:
@@ -71,6 +73,7 @@ will return this for my graduate school lab's partition:
 ```
 
 ### Nodes
+
 A node of course, is a node. It usually is associated with one or more partitions, 
 which means different groups are allowed to use it. `slurm2json.py` might parse a 
 node that looks like this:
@@ -85,6 +88,7 @@ node that looks like this:
 ```
 
 ### Features
+
 Features are attributes for a node, that (I think) we are allowed to define. 
 For this application, I decided to make Features indexed by partitions, so when 
 the user selects a partition, we can look up features available for it.  Here are 
@@ -95,6 +99,7 @@ features available for the `russpold` partition:
 ```
 
 ### Defaults
+
 I noticed that some partitions and nodes have a "Default" indicator as a variable, 
 and so I parse a lookup for defaults, for each general category of `partitions`, 
 and `nodes`. In the case of my test file, I found that `normal` was the default partition:
@@ -244,7 +249,7 @@ depending on the number of clusters and level of filtering you want to apply
 to each. First, take a look at the usage:
 
 
-```
+```console
 python slurm2json.py --help
 usage: slurm2json.py [-h] [--input INPUT] [--update]
                      [--disclude-part DISCLUDE_PART] [--print] [--force]
@@ -270,7 +275,7 @@ optional arguments:
 If you need to generate a `machines.json` for one cluster, the simplest 
 thing to do would be to cd to the folder with your `slurm.conf`, and generate the file:
 
-```
+```bash
 git clone https://www.github.com/researchapps/job-maker
 cd job-maker/helpers
 cp /etc/slurm/slurm.conf $PWD
@@ -282,35 +287,35 @@ And there are many tweaks that you can do to this basic command by way of the fo
 
 #### Options
 
-
 ###### Output File
 
 If you want to change the name of the output file, specify it:
 
-```
-python slurm2json.py --outfile cluster.json
+```bash
+$ python slurm2json.py --outfile cluster.json
 ```
 
 ###### Input files
 Or if you want to change the name of the input file, that works too:
 
-```
-python slurm2json.py --input slurm-corn.conf
+```bash
+$ python slurm2json.py --input slurm-corn.conf
 ```
 
 You can also specify more than one slurm configuration for input, and they will 
 both be parsed as separate clusters in the `machines.json` output file.
 
-```
-python slurm2json.py --input slurm-corn.conf,slurm.conf
+```bash
+$ python slurm2json.py --input slurm-corn.conf,slurm.conf
 ```
 
 ###### Force
+
 By default, if you have a `machines.json` already existing and you try to 
 overwrite it, you will get an error:
 
-```
-python slurm2json.py
+```bash
+$ python slurm2json.py
 machines.json already exists! Use --force to force overwrite.
 ```
 
